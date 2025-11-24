@@ -15,7 +15,7 @@ public class Busking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false, name="busking_id, length=26")
+    @Column(nullable=false, name="busking_id", length=26)
     private String buskingId;
 
     private String name;
