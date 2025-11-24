@@ -1,6 +1,6 @@
 package org.example.buskmate.domain;
 
-import lombok.Generated;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,13 +8,12 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-
 @NoArgsConstructor
 public class Busking {
 
     @Id
-    @Generated(strategy = Generation.IDENTITY)
-    private id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable=false, name="busking_id, length=26")
     private String buskingId;
