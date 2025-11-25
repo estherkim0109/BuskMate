@@ -71,29 +71,7 @@ public class MapMarker {
         }
     }
 
-    public static MapMarker bandMarker(String bandId, double lat, double lng, String title, String summary) {
-        return new MapMarker(
-                MarkerType.BAND,
-                bandId,
-                null,
-                lat,
-                lng,
-                title,
-                summary
-        );
-    }
 
-    public static MapMarker buskingMarker(String buskingId, double lat, double lng, String title, String summary) {
-        return new MapMarker(
-                MarkerType.BUSKING,
-                null,
-                buskingId,
-                lat,
-                lng,
-                title,
-                summary
-        );
-    }
 
     @PrePersist
     void onPrePersist() {
