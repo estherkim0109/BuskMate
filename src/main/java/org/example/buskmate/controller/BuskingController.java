@@ -16,6 +16,8 @@ import org.example.buskmate.service.BuskingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/buskings")
 @RequiredArgsConstructor
@@ -25,16 +27,16 @@ public class BuskingController {
 
     // 1. 생성
     @PostMapping("/create")
-    public void buskingCreate(@RequestBody BuskingCreateRequest req) {
+    public ResponseEntity<Void> buskingCreate(@RequestBody BuskingCreateRequest req) {
         buskingService.buskingCreate(req);
-        return ResponseEntity.created.noContent().build();
+        return ResponseEntity.status(201).build();
     }
 
     // 2. 전체 조회
     @GetMapping("/showall")
-    public ResponseEntity<BuskingSelectAllResponse> buskingSelectAll(@ModelAttribute BuskingSelectAllRequest req){
-        BuskingSelectAllResponse response = buskingService.buskingSelectAll(req);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<BuskingSelectAllResponse>> buskingSelectAll(){
+        List<BuskingSelectAllResponse> responseList = buskingService.buskingSelectAll();
+        return ResponseEntity.ok(responseList);
     }
 
     // 3. 단일 조회

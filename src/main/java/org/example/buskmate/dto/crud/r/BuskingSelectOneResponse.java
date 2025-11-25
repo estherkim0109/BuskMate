@@ -1,27 +1,23 @@
 package org.example.buskmate.dto.crud.r;
 
+import org.example.buskmate.domain.Busking;
+
+import java.time.LocalDateTime;
+
 public record BuskingSelectOneResponse(
-        String buskingId,
         String title,
         String place,
-        String buskingStart,
-        String buskingEnd
+        LocalDateTime buskingStart,
+        LocalDateTime buskingEnd
 )
 {
-    public static BuskingSelectOneResponse of(
-            String buskingId,
-            String title,
-            String place,
-            String buskingStart,
-            String buskingEnd
-    )
+    public static BuskingSelectOneResponse of(Busking b)
     {
         return new BuskingSelectOneResponse(
-                buskingId,
-                title,
-                place,
-                buskingStart,
-                buskingEnd
+                b.getTitle(),
+                b.getPlace(),
+                b.getBuskingStart(),
+                b.getBuskingEnd()
         );
     }
 }

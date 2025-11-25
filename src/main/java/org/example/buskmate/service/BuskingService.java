@@ -10,12 +10,15 @@ import org.example.buskmate.dto.crud.r.BuskingSelectOneRequest;
 import org.example.buskmate.dto.crud.r.BuskingSelectOneResponse;
 import org.example.buskmate.dto.crud.u.BuskingEditRequest;
 import org.example.buskmate.dto.crud.u.BuskingEditResponse;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface BuskingService {
     // 1. 생성
     void buskingCreate(BuskingCreateRequest req);
     // 2. 조회
-    BuskingSelectAllResponse buskingSelectAll(BuskingSelectAllRequest req);
+    List<BuskingSelectAllResponse> buskingSelectAll();
     BuskingSelectOneResponse buskingSelectOne(BuskingSelectOneRequest req);
     // 3. 수정
     BuskingEditResponse buskingEdit(BuskingEditRequest req);

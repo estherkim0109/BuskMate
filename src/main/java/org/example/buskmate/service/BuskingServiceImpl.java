@@ -14,8 +14,11 @@ import org.example.buskmate.dto.crud.r.BuskingSelectOneResponse;
 import org.example.buskmate.dto.crud.u.BuskingEditRequest;
 import org.example.buskmate.dto.crud.u.BuskingEditResponse;
 import org.example.buskmate.repository.BuskingRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +40,11 @@ public class BuskingServiceImpl implements BuskingService {
         buskingRepo.save(busking);
     }
     // 2. 조회
-    public BuskingSelectAllResponse buskingSelectAll(BuskingSelectAllRequest req) {
-//        // Implementation code here
-//        BuskingSelectAllResponse response = buskingRepo.findAll();
-        return null;
+    public List<BuskingSelectAllResponse> buskingSelectAll() {
+        return buskingRepo.findAllBusking()
+                .stream()
+                .map(BuskingSelectAllResponse :: of)
+                .toList();
     }
     public BuskingSelectOneResponse buskingSelectOne(BuskingSelectOneRequest req) {
         // Implementation code here
