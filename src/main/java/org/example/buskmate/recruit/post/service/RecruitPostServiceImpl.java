@@ -43,11 +43,12 @@ public class RecruitPostServiceImpl implements RecruitPostService {
 
         recruitPostRepository.save(post);
 
-        return new CreateRecruitPostResponseDto(
-                post.getPostId(),
-                post.getBand().getBandId(),
-                post.getTitle()
-        );
+        return CreateRecruitPostResponseDto.builder()
+                .postId(post.getPostId())
+                .bandId(post.getBand().getBandId())
+                .title(post.getTitle())
+                .build();
+
     }
 
 }
