@@ -1,4 +1,4 @@
-package org.example.buskmate.domain;
+package org.example.buskmate.busking.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

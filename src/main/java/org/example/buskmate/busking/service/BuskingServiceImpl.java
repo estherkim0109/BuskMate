@@ -1,16 +1,16 @@
-package org.example.buskmate.service;
+package org.example.buskmate.busking.service;
 
 import com.github.f4b6a3.ulid.UlidCreator; // ulid 라이브러리
 import lombok.RequiredArgsConstructor;
-import org.example.buskmate.domain.Busking;
-import org.example.buskmate.dto.crud.c.BuskingCreateRequest;
-import org.example.buskmate.dto.crud.d.BuskingDeleteRequest;
-import org.example.buskmate.dto.crud.r.BuskingSelectAllResponse;
-import org.example.buskmate.dto.crud.r.BuskingSelectOneRequest;
-import org.example.buskmate.dto.crud.r.BuskingSelectOneResponse;
-import org.example.buskmate.dto.crud.u.BuskingEditRequest;
-import org.example.buskmate.dto.crud.u.BuskingEditResponse;
-import org.example.buskmate.repository.BuskingRepository;
+import org.example.buskmate.busking.domain.Busking;
+import org.example.buskmate.busking.dto.crud.c.BuskingCreateRequest;
+import org.example.buskmate.busking.dto.crud.d.BuskingDeleteRequest;
+import org.example.buskmate.busking.dto.crud.r.BuskingSelectAllResponse;
+import org.example.buskmate.busking.dto.crud.r.BuskingSelectOneRequest;
+import org.example.buskmate.busking.dto.crud.r.BuskingSelectOneResponse;
+import org.example.buskmate.busking.dto.crud.u.BuskingEditRequest;
+import org.example.buskmate.busking.dto.crud.u.BuskingEditResponse;
+import org.example.buskmate.busking.repository.BuskingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

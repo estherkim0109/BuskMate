@@ -1,4 +1,4 @@
-package org.example.buskmate.dto.crud.d;
+package org.example.buskmate.busking.dto.crud.d;
 
 public record BuskingDeleteResponse(
         String result

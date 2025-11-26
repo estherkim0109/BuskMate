@@ -1,6 +1,6 @@
-package org.example.buskmate.repository;
+package org.example.buskmate.busking.repository;
 
-import org.example.buskmate.domain.Busking;
+import org.example.buskmate.busking.domain.Busking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

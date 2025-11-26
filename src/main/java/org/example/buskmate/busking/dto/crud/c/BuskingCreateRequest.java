@@ -1,4 +1,4 @@
-package org.example.buskmate.dto.crud.c;
+package org.example.buskmate.busking.dto.crud.c;
 
 import java.time.LocalDateTime;
 

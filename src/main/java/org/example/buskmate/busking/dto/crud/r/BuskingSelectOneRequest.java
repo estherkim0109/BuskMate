@@ -1,4 +1,4 @@
-package org.example.buskmate.dto.crud.r;
+package org.example.buskmate.busking.dto.crud.r;
 
 public record BuskingSelectOneRequest(
         String buskingId

@@ -1,20 +1,19 @@
-package org.example.buskmate.controller;
+package org.example.buskmate.busking.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.example.buskmate.dto.crud.c.BuskingCreateRequest;
-import org.example.buskmate.dto.crud.d.BuskingDeleteRequest;
-import org.example.buskmate.dto.crud.r.BuskingSelectAllResponse;
-import org.example.buskmate.dto.crud.r.BuskingSelectOneRequest;
-import org.example.buskmate.dto.crud.r.BuskingSelectOneResponse;
-import org.example.buskmate.dto.crud.u.BuskingEditRequest;
-import org.example.buskmate.dto.crud.u.BuskingEditResponse;
-import org.example.buskmate.service.BuskingService;
+import org.example.buskmate.busking.dto.crud.c.BuskingCreateRequest;
+import org.example.buskmate.busking.dto.crud.d.BuskingDeleteRequest;
+import org.example.buskmate.busking.dto.crud.r.BuskingSelectAllResponse;
+import org.example.buskmate.busking.dto.crud.r.BuskingSelectOneRequest;
+import org.example.buskmate.busking.dto.crud.r.BuskingSelectOneResponse;
+import org.example.buskmate.busking.dto.crud.u.BuskingEditRequest;
+import org.example.buskmate.busking.dto.crud.u.BuskingEditResponse;
+import org.example.buskmate.busking.service.BuskingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
