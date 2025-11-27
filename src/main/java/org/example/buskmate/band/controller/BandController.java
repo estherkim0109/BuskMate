@@ -1,5 +1,6 @@
 package org.example.buskmate.band.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.buskmate.band.dto.BandCreateRequest;
 import org.example.buskmate.band.dto.BandCreateResponse;
@@ -20,13 +21,11 @@ public class BandController {
 
     @PostMapping
     public ResponseEntity<BandCreateResponse> create(
-            @RequestBody BandCreateRequest request
+            @Valid @RequestBody BandCreateRequest request
     ) {
-        BandCreateResponse response =
-                bandService.create(request);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(bandService.create(request));
     }
+
 
     @GetMapping
     public ResponseEntity<List<BandListItemResponse>> getAll() {
