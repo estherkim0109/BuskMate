@@ -24,11 +24,6 @@ public class BandServiceImpl implements BandService {
 
         String leaderId = request.getLeaderId();
 
-        // 유효성 검증
-        if (request.getName() == null || request.getName().isBlank()) {
-            throw new IllegalArgumentException("밴드 이름을 작성해 주세요.");
-        }
-
         // 엔티티 생성
         Band band = Band.create(
                 request.getName(),
