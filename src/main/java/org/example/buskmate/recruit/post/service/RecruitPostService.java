@@ -12,4 +12,8 @@ public interface RecruitPostService {
     List<RecruitPostListDto> getActiveList();
 
     RecruitPostDetailResponseDto update(String postId, UpdateRecruitPostRequestDto req, String currentUserId);
+
+    RecruitPostStatusResponseDto close(String postId, String currentUserId);
+
+    RecruitPostStatusResponseDto delete(String postId, String currentUserId);
 }
