@@ -1,9 +1,9 @@
-package org.example.buskmate.recruit.application.dto;
+package org.example.buskmate.band.dto.recruitapplication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.example.buskmate.recruit.application.domain.RecruitApplicationStatus;
+import org.example.buskmate.band.domain.RecruitApplicationStatus;
 
 @Getter
 @Builder
