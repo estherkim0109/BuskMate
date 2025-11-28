@@ -1,19 +1,23 @@
 package org.example.buskmate.messenger.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Table(
         name = "chat_room_member",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_chat_room_member_room_user",
+                        name = "uk_chat_room_member",
                         columnNames = {"room_id", "user_id"}
                 )
         }
 )
+@NoArgsConstructor
 public class ChatRoomMember {
 
     @Id
@@ -27,12 +31,9 @@ public class ChatRoomMember {
     @Column(name = "user_id", nullable = false)
     private Long userId; // Users PK
 
-    // 채팅 도메인 관점 상태만 둔다
-    @Column(name = "muted", nullable = false)
-    private boolean muted = false;
-
-    @Column(name = "hidden", nullable = false)
-    private boolean hidden = false; // 유저가 방 목록에서 숨김 여부
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 20)
+    private ChatRoomRole role;
 
     @Column(name = "joined_at", nullable = false, updatable = false)
     private LocalDateTime joinedAt;
@@ -46,6 +47,14 @@ public class ChatRoomMember {
 
     @Column(name = "last_read_at")
     private LocalDateTime lastReadAt;
+
+    public ChatRoomMember(LocalDateTime lastReadAt, ChatRoom room, Long userId, LocalDateTime leftAt, Long lastReadMessageId, ChatRoomRole role) {
+        this.lastReadAt = lastReadAt;
+        this.room = room;
+        this.userId = userId;
+        this.leftAt = leftAt;
+        this.lastReadMessageId = lastReadMessageId;
+    }
 
     @PrePersist
     void onCreate() {

@@ -2,16 +2,15 @@ package org.example.buskmate.messenger.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-        name = "chat_room",
-        indexes = {
-                @Index(name = "uk_chat_room_key", columnList = "room_key", unique = true)
-        }
-)
+@Getter
+@Table(name = "chat_room")
+@NoArgsConstructor
 public class ChatRoom {
 
     @Id
@@ -31,6 +30,11 @@ public class ChatRoom {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+
+    public ChatRoom(String roomKey, String title) {
+        this.roomKey = roomKey;
+        this.title = title;
+    }
 
     @PrePersist
     protected void onCreate() {
