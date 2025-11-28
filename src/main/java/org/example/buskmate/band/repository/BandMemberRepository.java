@@ -12,5 +12,5 @@ public interface BandMemberRepository extends JpaRepository<BandMember, Long> {
 
     boolean existsByBand_BandIdAndUserId(String bandId, String userId);
 
-    Optional<BandMember> findByBand_BandIdAndBandMemberId(String bandId, String bandMemberId);
+    Optional<BandMember> findByBand_BandIdAndUserId(String bandId, String userId);
 }

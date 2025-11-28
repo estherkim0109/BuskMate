@@ -1,6 +1,5 @@
 package org.example.buskmate.band.domain;
 
-import com.github.f4b6a3.ulid.UlidCreator;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,23 +10,27 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "band_members",
+@Table(
+        name = "band_members",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_band_member_band_user",
+                        columnNames = {"band_id", "user_id"}
+                )
+        },
         indexes = {
                 @Index(
-                        name = "idx_band_member_band_member_id",
-                        columnList = "band_member_id",
-                        unique = true
+                        name = "idx_band_member_band_id",
+                        columnList = "band_id"
                 )
-        })
+        }
+)
 @Entity
 public class BandMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "band_member_id", nullable = false, length = 26, unique = true, updatable = false)
-    private String bandMemberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "band_id", nullable = false)
@@ -52,12 +55,5 @@ public class BandMember {
 
     public static BandMember join(Band band, String userId, BandMemberRole role) {
         return new BandMember(band, userId, role);
-    }
-
-    @PrePersist
-    private void fillBandMemberIdIfNull() {
-        if (this.bandMemberId == null || this.bandMemberId.isBlank()) {
-            this.bandMemberId = UlidCreator.getUlid().toString();
-        }
     }
 }
