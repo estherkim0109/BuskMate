@@ -70,4 +70,8 @@ public class BandMember {
         this.status = BandMemberStatus.REJECTED;
     }
 
+    public static BandMember active(Band band, String userId, BandMemberRole role) {
+        return new BandMember(band, userId, role, BandMemberStatus.ACTIVE);
+    }
+
 }

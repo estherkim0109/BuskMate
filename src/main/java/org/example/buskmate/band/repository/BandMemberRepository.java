@@ -24,4 +24,6 @@ public interface BandMemberRepository extends JpaRepository<BandMember, Long> {
             String bandId,
             String userId
     );
+
+    boolean existsByBand_BandIdAndUserId(String bandId, String userId);
 }
