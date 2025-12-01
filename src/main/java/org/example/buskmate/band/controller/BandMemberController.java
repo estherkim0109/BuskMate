@@ -2,9 +2,9 @@ package org.example.buskmate.band.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.buskmate.band.dto.BandMemberListItemResponse;
-import org.example.buskmate.band.dto.band.BandMemberRegisterRequest;
 import org.example.buskmate.band.service.BandMemberService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +27,12 @@ public class BandMemberController {
     @PostMapping("/{bandId}/members/invite")
     public ResponseEntity<Void> inviteMember(
             @PathVariable String bandId,
-            @RequestBody BandMemberRegisterRequest request
+            @AuthenticationPrincipal CustomUser user
     ) {
-        bandMemberService.inviteMember(bandId, request.getUserId());
+        String userId = user.getUserId();
+
+        bandMemberService.inviteMember(bandId, userId);
         return ResponseEntity.noContent().build();
     }
+
 }
