@@ -1,5 +1,6 @@
 package org.example.buskmate.band.service;
 
+import org.example.buskmate.band.domain.Band;
 import org.example.buskmate.band.dto.bandmember.BandMemberListItemResponse;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface BandMemberService {
     void acceptInvitation(String bandId, String userId);
 
     void rejectInvitation(String bandId, String userId);
+
+    void addMemberAccepted(Band band, String userId);
 }
