@@ -1,7 +1,7 @@
 package org.example.buskmate.band.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.buskmate.band.dto.BandMemberListItemResponse;
+import org.example.buskmate.band.dto.bandmember.BandMemberListItemResponse;
 import org.example.buskmate.band.service.BandMemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

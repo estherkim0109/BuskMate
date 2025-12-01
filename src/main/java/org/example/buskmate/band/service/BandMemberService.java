@@ -1,6 +1,6 @@
 package org.example.buskmate.band.service;
 
-import org.example.buskmate.band.dto.BandMemberListItemResponse;
+import org.example.buskmate.band.dto.bandmember.BandMemberListItemResponse;
 
 import java.util.List;
 

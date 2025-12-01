@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.buskmate.band.domain.Band;
 import org.example.buskmate.band.domain.BandMember;
 import org.example.buskmate.band.domain.BandMemberRole;
-import org.example.buskmate.band.dto.BandMemberListItemResponse;
+import org.example.buskmate.band.dto.bandmember.BandMemberListItemResponse;
 import org.example.buskmate.band.repository.BandMemberRepository;
 import org.example.buskmate.band.repository.BandRepository;
 import org.springframework.stereotype.Service;
