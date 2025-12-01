@@ -9,16 +9,17 @@ import java.util.Optional;
 
 public interface BandMemberRepository extends JpaRepository<BandMember, Long> {
 
+    //멤버 조회 - Active상태만
     List<BandMember> findAllByBand_BandIdAndStatus(String bandId, BandMemberStatus status);
 
-    // 1. 이미 ACTIVE 멤버인지 체크
+    //이미 멤버인지 체크 - 상태
     boolean existsByBand_BandIdAndUserIdAndStatus(
             String bandId,
             String userId,
             BandMemberStatus status
     );
 
-    // 2. 초대 대기(INVITED) 상태인 멤버 조회 (수락/거절할 때 사용)
+    //초대 대기(INVITED) 상태인 멤버 조회 (수락/거절할 때 사용)
     Optional<BandMember> findByBand_BandIdAndUserId(
             String bandId,
             String userId

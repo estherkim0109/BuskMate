@@ -56,7 +56,7 @@ public class BandMemberServiceImpl implements BandMemberService {
             throw new IllegalStateException("이미 이 밴드의 멤버입니다.");
         }
 
-        // 이미 초대 상태인 경우 처리 (재초대 막을지 말지는 기획에 따라)
+        // 이미 초대 상태인 경우 처리
         if (bandMemberRepository.existsByBand_BandIdAndUserIdAndStatus(bandId, targetUserId, BandMemberStatus.INVITED)) {
             throw new IllegalStateException("이미 초대 대기 중인 멤버입니다.");
         }
@@ -72,7 +72,7 @@ public class BandMemberServiceImpl implements BandMemberService {
                 .findByBand_BandIdAndUserId(bandId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("멤버 정보를 찾을 수 없습니다."));
 
-        member.accept();  // 여기서 INVITED 체크 + ACTIVE 전환
+        member.accept();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class BandMemberServiceImpl implements BandMemberService {
                 .findByBand_BandIdAndUserId(bandId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("멤버 정보를 찾을 수 없습니다."));
 
-        member.reject(); // status = REJECTED, 또는 여기서 delete() 해도 됨
+        member.reject();
     }
 
 

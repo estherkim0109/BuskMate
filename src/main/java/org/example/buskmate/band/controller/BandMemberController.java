@@ -29,11 +29,11 @@ public class BandMemberController {
     public ResponseEntity<Void> inviteMember(
             @PathVariable String bandId,
             @AuthenticationPrincipal CustomUser leader,
-            @RequestBody BandMemberRegisterRequest request  // 대상 유저
+            @RequestBody BandMemberRegisterRequest request  // 초대할 유저아이디
     ) {
         bandMemberService.inviteMember(
                 bandId,
-                leader.getUserId(),     // 초대하는 사람 (리더)
+                leader.getUserId(),     // 초대하는 사람 - 리더
                 request.getUserId()     // 초대받는 사람
         );
         return ResponseEntity.noContent().build();
