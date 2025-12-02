@@ -1,0 +1,67 @@
+package org.example.buskmate.community.domain;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Table(name = "community_comments")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+public class CommunityComment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_user_id", nullable = false)
+    private CommunityPost authorUser;
+
+    @Column(nullable = false)
+    private String content;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 16)
+    private DeleteStatus isDeleted;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "update_at", nullable = false, updatable = false)
+    private LocalDateTime updatedAt;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
+    @Builder
+    private CommunityComment(
+            CommunityPost authorUser,
+            String content,
+            DeleteStatus isDeleted,
+            Long version
+    )
+    {
+        this.authorUser = authorUser;
+        this.content = content;
+        this.isDeleted = isDeleted;
+        this.version = version;
+    }
+
+    public void uploadComment(String content) {
+        this.content = content;
+    }
+
+    public void softDelete() {
+        this.isDeleted = DeleteStatus.DELETED;
+    }
+}
