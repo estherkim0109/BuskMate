@@ -1,57 +1,82 @@
-name: Build JAR and Deploy to EC2 (jar 기반 배포)
+name: Build JAR and Deploy to EC2 (via ECR)
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master" ]   # dev로 바꾸고 싶으면 여기만 수정
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write   # OIDC 토큰 사용 허용
+      contents: read
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          distribution: temurin
           java-version: '21'
-          distribution: 'temurin'
-          cache: gradle
 
       - name: Build jar with Gradle
         run: |
           chmod +x gradlew
           ./gradlew bootJar -x test
-          echo "=== build/libs 내용 ==="
-          ls -l build/libs
-          # 만들어진 jar 중 첫 번째를 app.jar 로 복사
           JAR_FILE=$(ls build/libs/*.jar | head -n 1)
           cp "$JAR_FILE" app.jar
-          echo "=== app.jar 확인 ==="
-          ls -l app.jar
 
-      - name: Copy jar and Dockerfile to EC2
-        uses: appleboy/scp-action@v0.1.7
+      # === 여기서부터 AWS IAM Role + ECR 로그인 ===
+      - name: Configure AWS credentials (OIDC + IAM Role)
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          # 방금 만든 app.jar + Dockerfile 두 개만 전송
-          source: "app.jar,Dockerfile"
-          target: "~/buskmate-deploy"
-          overwrite: true
+          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/GithubActionsBuskMateRole
+          aws-region: ap-northeast-2
 
-      - name: Deploy on EC2 (Docker build & run)
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          ECR_REPOSITORY: buskmate    # ECR 리포 이름
+          IMAGE_TAG: latest           # 또는 ${{ github.sha }}
+        run: |
+          echo "Registry: $ECR_REGISTRY"
+          echo "Repository: $ECR_REPOSITORY"
+          echo "Tag: $IMAGE_TAG"
+
+          # app.jar를 Docker 컨텍스트에 두고, Dockerfile 사용
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # === 이제 EC2에 가서 pull + run만 ===
+      - name: Deploy on EC2 (pull from ECR and run)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/buskmate-deploy
-            docker build -t buskmate .
+            # ECR 로그인 (EC2 쪽에서도)
+            aws --version || sudo yum install -y awscli
+
+            REGION=ap-northeast-2
+            ECR_REGISTRY=${{ steps.ecr-login.outputs.registry }}
+            ECR_REPOSITORY=buskmate
+            IMAGE_TAG=latest
+
+            aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+
+            docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
             docker stop buskmate-app || true
             docker rm buskmate-app || true
-            docker run -d -p 8080:8080 --name buskmate-app buskmate
+
+            docker run -d -p 8080:8080 --name buskmate-app \
+              $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
