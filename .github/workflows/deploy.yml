@@ -63,35 +63,27 @@ jobs:
             --push .
 
       # === 이제 EC2에 가서 pull + run만 ===
-      - name: Deploy on EC2 (pull from ECR and run)
+      # === 이제 EC2에서 docker-compose로 배포 ===
+      - name: Deploy on EC2 (docker-compose)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # ECR 로그인 (EC2 쪽에서도)
+            cd ~/buskmate-deploy   # EC2 안에서 docker-compose.yml 있는 폴더
+
+            # AWS CLI 없으면 설치
             aws --version || sudo yum install -y awscli
 
             REGION=ap-northeast-2
             ECR_REGISTRY=${{ steps.ecr-login.outputs.registry }}
-            ECR_REPOSITORY=buskmate
-            IMAGE_TAG=latest
 
-            aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+            # ECR 로그인
+            aws ecr get-login-password --region $REGION \
+              | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-            docker stop buskmate-app || true
-            docker rm buskmate-app || true
-
-            docker run -d -p 8080:8080 --name buskmate-app \
-              -e SPRING_DATASOURCE_URL='${{ secrets.RDS_URL }}' \
-              -e SPRING_DATASOURCE_USERNAME='${{ secrets.RDS_USERNAME }}' \
-              -e SPRING_DATASOURCE_PASSWORD='${{ secrets.RDS_PASSWORD }}' \
-              -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
-              -e SPRING_PROFILES_ACTIVE=prod \
-              $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-            
-
+            # 최신 이미지 받아서 컨테이너 재시작
+            docker-compose pull
+            docker-compose up -d
+      
