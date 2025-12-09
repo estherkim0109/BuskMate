@@ -86,5 +86,12 @@ jobs:
             docker rm buskmate-app || true
 
             docker run -d -p 8080:8080 --name buskmate-app \
+              -e SPRING_DATASOURCE_URL='${{ secrets.RDS_URL }}' \
+              -e SPRING_DATASOURCE_USERNAME='${{ secrets.RDS_USERNAME }}' \
+              -e SPRING_DATASOURCE_PASSWORD='${{ secrets.RDS_PASSWORD }}' \
+              -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
+              -e SPRING_PROFILES_ACTIVE=prod \
               $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+            
 
