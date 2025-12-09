@@ -87,3 +87,4 @@ jobs:
 
             docker run -d -p 8080:8080 --name buskmate-app \
               $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
