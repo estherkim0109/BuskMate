@@ -62,28 +62,29 @@ jobs:
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
             --push .
 
-      # === 이제 EC2에 가서 pull + run만 ===
-      # === 이제 EC2에서 docker-compose로 배포 ===
-      - name: Deploy on EC2 (docker-compose)
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ~/buskmate-deploy   # EC2 안에서 docker-compose.yml 있는 폴더
+            # === 이제 EC2에서 docker-compose로 배포 (SSM 사용) ===
+      - name: Deploy on EC2 via SSM (docker-compose)
+        env:
+          REGION: ap-northeast-2
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          EC2_INSTANCE_ID: ${{ secrets.EC2_INSTANCE_ID }}
+        run: |
+          echo "Send deploy command to EC2 via SSM. instance=$EC2_INSTANCE_ID"
 
-            # AWS CLI 없으면 설치
-            aws --version || sudo yum install -y awscli
+          COMMAND_ID=$(aws ssm send-command \
+            --region "$REGION" \
+            --instance-ids "$EC2_INSTANCE_ID" \
+            --document-name "AWS-RunShellScript" \
+            --comment "BuskMate deploy via SSM" \
+            --parameters "{\"commands\":[
+              \"cd /home/ec2-user/buskmate-deploy\",
+              \"aws --version || sudo yum install -y awscli\",
+              \"aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ECR_REGISTRY\",
+              \"docker-compose pull\",
+              \"docker-compose up -d\",
+              \"docker ps\"
+            ]}" \
+            --query "Command.CommandId" \
+            --output text)
 
-            REGION=ap-northeast-2
-            ECR_REGISTRY=${{ steps.ecr-login.outputs.registry }}
-
-            # ECR 로그인
-            aws ecr get-login-password --region $REGION \
-              | docker login --username AWS --password-stdin $ECR_REGISTRY
-
-            # 최신 이미지 받아서 컨테이너 재시작
-            docker-compose pull
-            docker-compose up -d
-      
+          echo "SSM Command ID: $COMMAND_ID"
